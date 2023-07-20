@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { openai } = require('../external/openai');
-
+const fs = require('fs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -50,7 +50,14 @@ router.post('/brain', async (req, res) => {
 
 router.post('/ear', async (req, res) => {
   
-  res.send('ok');
+  const resp = await openai.createTranscription(
+    fs.createReadStream("./demo-audio/demoaudio.mp3"),
+    "whisper-1"
+  );
+
+  console.log(resp.data.text);
+
+  res.send(resp.data.text);
 });
 
 router.post('/mouth', async (req, res) => {
