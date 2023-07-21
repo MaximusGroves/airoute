@@ -5,22 +5,43 @@ const fs = require('fs');
 const axios = require('axios');
 const multer = require('multer');
 const FormData = require('form-data');
+const stream = require('stream');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './tmp/'); // The location where the uploaded files will be stored temporarily.
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + '.mp3');
-  },
-});
+const upload = multer({ storage: multer.memoryStorage() });
 
-const upload = multer({ storage: storage });
-
-/* GET home page. */
 router.get('/', function (req, res, next) {
   // res.render('index', { title: 'Express' });
   res.send('hi');
+});
+
+router.post('/ear', upload.single('file'), async (req, res) => {
+  const defaultLocation = './demo-audio/demoaudio.mp3';
+
+  const buffer = req.file.buffer;
+  const OPENAI_API_KEY = process.env.openaikey;
+  const url = 'https://api.openai.com/v1/audio/transcriptions';
+  const headers = {
+    Authorization: `Bearer ${OPENAI_API_KEY}`,
+    'Content-Type': 'multipart/form-data',
+  };
+
+  let formData = new FormData();
+  formData.append('file', buffer, {
+    contentType: 'audio/mpeg',
+    name: 'file',
+    filename: 'audio.mp3',
+  });
+  formData.append('model', 'whisper-1');
+
+  try {
+    let response = await axios.post(url, formData, {
+      headers: formData.getHeaders(headers),
+    });
+    res.send(response.data.text);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while transcribing the audio.');
+  }
 });
 
 router.post('/brain', async (req, res) => {
@@ -53,27 +74,6 @@ router.post('/brain', async (req, res) => {
   }
 
   res.send(suggestions);
-});
-
-router.post('/ear', upload.single('file'), async (req, res) => {
-  const location = req?.file?.path || './demo-audio/demoaudio.mp3';
-
-  const resp = await openai.createTranscription(
-    fs.createReadStream(location),
-    'whisper-1'
-  );
-
-  if (req?.file?.path) {
-    fs.unlink(req?.file?.path, (err) => {
-      if (err) {
-        console.error('Failed to delete local file:' + err);
-      } else {
-        console.log('Successfully deleted local file');
-      }
-    });
-  }
-
-  res.send(resp.data.text);
 });
 
 router.post('/mouth', async (req, res) => {
