@@ -11,8 +11,11 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-process.env['GOOGLE_APPLICATION_CREDENTIALS'] =
-  './thing1/vibewar-service-worker';
+process.env['GOOGLE_APPLICATION_CREDENTIALS'] = path.resolve(
+  __dirname,
+  'thing1',
+  'vibewar-service-worker'
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
