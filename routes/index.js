@@ -126,7 +126,7 @@ router.post('/mouth', async (req, res) => {
       url: 'https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL/stream',
       headers: {
         accept: 'audio/mpeg',
-        'xi-api-key': '8aaf1c64ece18bb15ed32c4cc992f780',
+        'xi-api-key': process.env.elevenlabskey,
         'Content-Type': 'application/json',
       },
       data: {
