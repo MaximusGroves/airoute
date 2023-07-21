@@ -5,6 +5,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,6 +17,8 @@ process.env['GOOGLE_APPLICATION_CREDENTIALS'] = path.resolve(
   'thing1',
   'vibewar-service-worker'
 );
+
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

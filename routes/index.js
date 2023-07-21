@@ -7,6 +7,8 @@ const multer = require('multer');
 const FormData = require('form-data');
 const stream = require('stream');
 
+//making sure this is in there
+
 const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', function (req, res, next) {
