@@ -123,7 +123,7 @@ router.post('/mouth', async (req, res) => {
   try {
     const response = await axios({
       method: 'post',
-      url: 'https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL/stream',
+      url: 'https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL',
       headers: {
         accept: 'audio/mpeg',
         'xi-api-key': process.env.elevenlabskey,
