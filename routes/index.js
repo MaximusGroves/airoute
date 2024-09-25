@@ -101,11 +101,11 @@ router.post('/brain', async (req, res) => {
     gptRes = await openai.createChatCompletion({
       // model: 'text-davinci-003',
       // model: 'gpt-3.5-turbo',
-      // model: "gpt-4o-mini",
-      model: "gpt-4-turbo",
+      model: "gpt-4o-mini",
+      // model: "gpt-4-turbo",
       messages,
       max_tokens: 2000,
-      temperature: 1,
+      temperature: 0.5,
     });
     suggestions = gptRes.data.choices[0].message.content;
   } catch (err) {
